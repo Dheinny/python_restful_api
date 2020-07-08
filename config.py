@@ -1,7 +1,7 @@
 # _*_ coding: utf-8 _*_
 
 #Python
-from os import gevenv
+from os import getenv
 
 class Config:
     SECRET_KEY = getenv("SECRET_KEY")
