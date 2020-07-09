@@ -17,3 +17,12 @@ def client():
     yield testing_client
 
     ctx.pop()
+
+@pytest.fixture(scope="function")
+def mongo(request, client):
+
+    def fin():
+        print("\n[teardown] disconnect from db")
+
+    fin()
+
