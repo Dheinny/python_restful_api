@@ -1,12 +1,13 @@
 # _*_ coding: utf-8 _*_
 
 from mongoengine import (
-    StringField
+    StringField,
+    DecimalField
 )
 
-from apps.store.models import User
+from apps.store.models import Client, Product
 
-class TestUser:
+class TestClient:
 
     def setup_method(self):
         self.data = {
@@ -15,7 +16,7 @@ class TestUser:
             "address": "rua teste1, cidade teste1"
         }
 
-        self.model = User(**self.data)
+        self.model = Client(**self.data)
 
     def test_email_field_exist(self):
         """
@@ -46,3 +47,20 @@ class TestUser:
     
     #TODO tests for other fields, following the same idea above
 
+
+class TestProduct:
+    
+    def setup_method(self):
+        self.data = {
+            "cod_prod": "INF001",
+            "name": "product1",
+            "price": 5.67 
+        }
+
+        self.model = Product(**self.data)
+
+    def test_price_id_decimal(self):
+        assert isinstance(self.model._fields["price"], DecimalField)
+
+    def test_desc_default_is_empty(self):
+        assert self.model.desc == ""

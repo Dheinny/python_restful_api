@@ -8,13 +8,14 @@ from mongoengine import (
     EmbeddedDocument,
     EmbeddedDocumentField,
     StringField,
-    URLField
+    URLField,
+    DecimalField
 )
 
 from apps.db import db
 
 
-class UserMixin(db.Document):
+class ClientMixin(db.Document):
     """
     Default implementation for User fields
     """
@@ -26,7 +27,20 @@ class UserMixin(db.Document):
     email = EmailField(required=True, unique=True)
     created = DateTimeField(default=datetime.now)
 
-class User(UserMixin):
+class ProductMixin(db.Document):
+    """
+    Default implementation for Product fiels
+    """
+
+    meta = { 
+        "abstract": True,
+        "ordering": ["cod_prod"]
+    }
+
+    cod_prod = StringField(required=True, unique=True)
+    created = DateTimeField(default=datetime.now)
+
+class Client(ClientMixin):
     """
     Users
     """
@@ -35,3 +49,11 @@ class User(UserMixin):
     name = StringField(required=True) 
     address = StringField(default="")
 
+
+class Product(ProductMixin):
+    
+    meta = {"collection": "products"}
+
+    name = StringField(required=True)
+    desc = StringField(default="")
+    price = DecimalField(default=0.0) 
