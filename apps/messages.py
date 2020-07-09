@@ -1,0 +1,8 @@
+MSG_FIELD_REQUIRED = "{} field is required."
+MSG_INVALID_DATA = "An error occured in the informated fields." 
+MSG_DOES_NOT_EXIST = "This {} does not exist."
+MSG_EXCEPTION = "An error occured on the server. Please, contact the admim."
+MSG_ALREADY_EXISTS = "This {} already exists with these datas."
+MSG_RESOURCE_MUST_STRING = "The resource must be a string."
+MSG_RESOURCE_CREATED = "The {} was created with success"
+MSG_NO_DATA = "No data was received from request"
