@@ -1,10 +1,7 @@
 # _*_ coding: utf-8 _*_
 
 from os import getenv
-from os.path import dirname, isfile, join
-
 from dotenv import load_dotenv
-
 load_dotenv()
 
 from apps import create_app

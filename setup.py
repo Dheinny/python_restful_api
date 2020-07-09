@@ -8,6 +8,10 @@ __description__ = "Python API Restful test"
 
 __author__ = "Dheinny Marques"
 __author_email__ = "dheinny@gmail.com"
+testing_extras = [
+    "pytest",
+    "pytest-cov"
+]
 
 setup(
     name="api",
@@ -29,5 +33,10 @@ setup(
         "Programming Language :: Python :: 3.6",
         "License :: OSI Approved :: MIT License",
     ],
+    setup_requires=["pytest-runner"],
+    tests_require=["pytest"],
+    extras_require={
+        "testing": testing_extras,
+    },
 )
 
