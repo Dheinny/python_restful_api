@@ -2,7 +2,7 @@
 
 from flask_restful import Api, Resource
 
-from apps.store.resources import CreateClient
+from apps.store.resources import ClientCollection, ClientItem
 
 class Index(Resource):
 
@@ -14,7 +14,8 @@ api = Api()
 def configure_api(app):
     api.add_resource(Index, "/")
 
-    api.add_resource(CreateClient, "/clients")
+    api.add_resource(ClientCollection, "/clients" )
+    api.add_resource(ClientItem, "/clients/<int:page_id>")
 
     api.init_app(app)
 
