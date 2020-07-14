@@ -6,6 +6,7 @@ from marshmallow.fields import Email, Str, Decimal
 from apps.messages import MSG_FIELD_REQUIRED
 
 class ClientSchema(Schema):
+    id = Str()
     name = Str(required=True, 
             error_messages={"required": MSG_FIELD_REQUIRED.format("name")}
            )
