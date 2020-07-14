@@ -44,7 +44,7 @@ class Client(ClientMixin):
     """
     Users
     """
-    meta = {"collection": "users"}
+    meta = {"collection": "clients"}
 
     name = StringField(required=True) 
     address = StringField(default="")

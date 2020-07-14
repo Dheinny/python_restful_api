@@ -43,7 +43,7 @@ def resp_exception(resource: str, description :str = "",
 
     return resp
 
-def resp_does_not_exist(resource :str, description :str):
+def resp_does_not_exist(resource :str, description :str=None, msg=None):
     """
     Responses 404 - Not Found
     """
@@ -51,9 +51,14 @@ def resp_does_not_exist(resource :str, description :str):
     if not isinstance(resource, str):
         raise ValueError(MSG_RESOURCE_MUST_STRING)
 
+    if not msg:
+        msg = MSG_DOES_NOT_EXIST.format(description)
+    else: 
+        msg = msg.format(description)
+
     resp = jsonify({
         "resource": resource,
-        "message": MSG_DOES_NOT_EXIST.format(description)
+        "message": msg 
     })
 
     resp.status_code = 404

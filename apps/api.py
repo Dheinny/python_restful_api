@@ -7,7 +7,7 @@ from apps.store.resources import ClientCollection, ClientItem
 class Index(Resource):
 
     def get(self):
-        return {"hello": "world by apps"}
+        return {"hello": "Welcome to our virtual store"}
 
 api = Api()
 

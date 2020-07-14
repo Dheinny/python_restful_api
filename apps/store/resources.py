@@ -10,6 +10,7 @@ from mongoengine.errors import (
     DoesNotExist
 )
 from marshmallow.exceptions import ValidationError as ValidationErrorMarshmallow
+import werkzeug.exceptions as wzg
 
 from apps.responses import (
     resp_already_exists, resp_exception, resp_does_not_exist,
@@ -19,7 +20,7 @@ from apps.responses import (
 from apps.messages import(
     MSG_NO_DATA, MSG_RESOURCE_CREATED, MSG_INVALID_DATA,
     MSG_RESOURCE_FETCHED_PAGINATED, MSG_RESOURCE_FETCHED,
-    MSG_RESOURCE_DELETED
+    MSG_RESOURCE_DELETED, MSG_NO_RESOURCE_REGISTERED
 )
 
 # Local
@@ -65,8 +66,6 @@ class ClientCollection(Resource):
         args = request.args
         page_id = int(args["page"]) if args.get("page") else 1
         page_size = 10
-        print(args)
-        print(request.args)
         if "page_size" in request.args:
             page_size = int(request.args.get("page_size"))
             page_size = 10 if page_size < 1 else page_size
@@ -74,6 +73,9 @@ class ClientCollection(Resource):
         try: 
             clients = Client.objects()
             count = clients.count() 
+            if count == 0:
+                return resp_does_not_exist("Client", "client", msg=MSG_NO_RESOURCE_REGISTERED)
+
             if count <= ((page_id-1)*page_size):
                 page_id = ceil(count/page_size)
 
@@ -81,6 +83,9 @@ class ClientCollection(Resource):
 
         except FieldDoesNotExist as e:
             return resp_exception("Client", description=e.__str__())
+
+        except wzg.NotFound:
+            return resp_does_not_exist("Client", "pagination")
 
         except Exception as e:
             return resp_exception("Client", description=e.__str__())
