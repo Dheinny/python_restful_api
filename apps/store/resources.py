@@ -1,19 +1,25 @@
 # _*_ coding: utf-8 _*_
 
+from math import ceil
+
 from flask import request
 
 from flask_restful import Resource
-from mongoengine.errors import NotUniqueError, ValidationError
+from mongoengine.errors import (
+    NotUniqueError, ValidationError, FieldDoesNotExist,
+    DoesNotExist
+)
 from marshmallow.exceptions import ValidationError as ValidationErrorMarshmallow
 
 from apps.responses import (
-    resp_already_exists, resp_exception,
+    resp_already_exists, resp_exception, resp_does_not_exist,
     resp_data_invalid, resp_ok
 )
 
 from apps.messages import(
     MSG_NO_DATA, MSG_RESOURCE_CREATED, MSG_INVALID_DATA,
-    MSG_RESOURCE_FETCHED_PAGINATED
+    MSG_RESOURCE_FETCHED_PAGINATED, MSG_RESOURCE_FETCHED,
+    MSG_RESOURCE_DELETED
 )
 
 # Local
@@ -54,16 +60,24 @@ class ClientCollection(Resource):
         return resp_ok(
                 "Client", MSG_RESOURCE_CREATED.format("Client"), data=result)
 
-    def get(self, page_id=1):
+    def get(self):
         schema = ClientSchema(many=True)
+        args = request.args
+        page_id = int(args["page"]) if args.get("page") else 1
         page_size = 10
-
+        print(args)
+        print(request.args)
         if "page_size" in request.args:
             page_size = int(request.args.get("page_size"))
             page_size = 10 if page_size < 1 else page_size
 
         try: 
-            clients = Client.objects().paginate(page_id, page_size)
+            clients = Client.objects()
+            count = clients.count() 
+            if count <= ((page_id-1)*page_size):
+                page_id = ceil(count/page_size)
+
+            clients = clients.paginate(page_id, page_size)
 
         except FieldDoesNotExist as e:
             return resp_exception("Client", description=e.__str__())
@@ -84,7 +98,37 @@ class ClientCollection(Resource):
         )
 
 
-class ClientItem(Resource):
+class ClientItem(Resource):    
+    def get(self, user_id):
+        schema = ClientSchema()
+        try:
+            client = Client.objects.get(id=user_id)
     
-    def get(self, page_id):
-        return ClientCollection().get(page_id)
+        except DoesNotExist as e:
+            return resp_does_not_exist("Client", "client id {}".format(user_id))
+
+        except Exception as e:
+            print(e)
+            return resp_exception("Client", description=e.__str__())
+
+        result = schema.dump(client)
+        return resp_ok(
+            "Clients", MSG_RESOURCE_FETCHED.format("Clients", user_id),
+            data=result
+        )
+
+    def delete(self, user_id):
+        schema = ClientSchema()
+        try:
+            client = Client.objects.get(id=user_id).delete()
+
+        except DoesNotExist as e:
+            return resp_does_not_exist("Client", "client id {}".format(user_id))
+        
+        except Exception as e:
+            return resp_exception("Client", description=e.__str__())
+
+        from apps.responses import resp_ok_no_content
+
+        return resp_ok_no_content()
+

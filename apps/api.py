@@ -15,7 +15,7 @@ def configure_api(app):
     api.add_resource(Index, "/")
 
     api.add_resource(ClientCollection, "/clients" )
-    api.add_resource(ClientItem, "/clients/<int:page_id>")
+    api.add_resource(ClientItem, "/clients/<string:user_id>")
 
     api.init_app(app)
 

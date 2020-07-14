@@ -99,4 +99,13 @@ def resp_ok(resource :str, msg :str, data=None, **extras):
 
     return resp
 
+def resp_ok_no_content():
+    """
+    Response 204 - No Content
+    Used in response to delete operation
+    """
 
+    resp = jsonify()
+    resp.status_code = 204
+
+    return resp
