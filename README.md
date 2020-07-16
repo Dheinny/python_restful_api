@@ -117,6 +117,27 @@ curl -X DELETE -i localhost:5000/products/{cod_prod}
 $ curl -X DELETE -i localhost:5000/products/INF01
 ```
 
+#### Orders
+##### POST
+Create a new order
+*{client_id} already must to exist in database 
+```
+$ curl -X POST localhost:5000/orders -H "Content-Type: application/json" -d '{
+    "client_id": "5f0f957858f7f0cb0564490b",
+    "products_cart": ["INF014"]    
+}'
+```
+
+##### GET
+###### List all orders
+```
+curl localhost:5000/orders
+```
+To paginate the result, *page* and *page_size* are available:
+```
+curl "localhost:5000/orders?page=2&page_size=2"
+```
+
 # Execute tests
 To execute tests you must to install the packages required in test.py ou dev.py files, in the #HOME_PROJ/requirements dir.
 

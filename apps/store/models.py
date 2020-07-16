@@ -9,7 +9,9 @@ from mongoengine import (
     EmbeddedDocumentField,
     StringField,
     URLField,
-    DecimalField
+    DecimalField,
+    ReferenceField,
+    ListField
 )
 
 from apps.db import db
@@ -42,7 +44,7 @@ class ProductMixin(db.Document):
 
 class Client(ClientMixin):
     """
-    Users
+    Client
     """
     meta = {"collection": "clients"}
 
@@ -51,9 +53,22 @@ class Client(ClientMixin):
 
 
 class Product(ProductMixin):
-    
+    """
+    Product
+    """
     meta = {"collection": "products"}
 
     name = StringField(required=True)
     desc = StringField(default="")
     price = DecimalField(default=0.0) 
+
+class Order(db.Document):
+    """
+    Order
+    """
+    meta = {"collection": "orders"}
+
+    client = ReferenceField(Client)
+    products_cart = ListField(StringField())
+    data_order = DateTimeField(default=datetime.now)
+    created = DateTimeField(default=datetime.now)
