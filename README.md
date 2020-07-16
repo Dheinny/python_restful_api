@@ -138,6 +138,22 @@ To paginate the result, *page* and *page_size* are available:
 curl "localhost:5000/orders?page=2&page_size=2"
 ```
 
+###### Get a specific order by order_id
+curl localhost:5000/orders/{order_id}, where the cod_prod is the code of the product
+
+```
+$ curl localhost:5000/orders/5f1078f0ae8928b2ca94d1b0
+```
+
+##### DELETE{}
+Delete a order by order_id
+curl -X DELETE -i localhost:5000/orders/{order_id}
+
+```
+$ curl -X DELETE -i localhost:5000/orders/5f1078f0ae8928b2ca94d1b0
+```
+
+
 # Execute tests
 To execute tests you must to install the packages required in test.py ou dev.py files, in the #HOME_PROJ/requirements dir.
 

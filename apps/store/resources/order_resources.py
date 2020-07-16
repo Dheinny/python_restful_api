@@ -23,6 +23,8 @@ from apps.store.schemas import (
     ReqOrderSchema
 )
 
+from apps.decorators.methods_decorator import GetDecorator, DeleteDecorator
+
 class OrderCollection(Resource):
 
     def post(self, *args, **kwargs):
@@ -95,6 +97,22 @@ class OrderCollection(Resource):
             data=result, **extra
         )
 
+class OrderItem(Resource):
+    @staticmethod
+    @GetDecorator
+    def get(order_id):
+        schema = OrderSchema()
+        order = Order.objects.get(id=order_id)
+        result = schema.dump(order)
 
+        return resp_ok(
+            "Products", MSG_RESOURCE_FETCHED.format("Products", order_id),
+            data=result
+        )
 
+    @staticmethod
+    @DeleteDecorator
+    def delete(order_id):
+        order = Order.objects.get(id=order_id).delete()
 
+        return resp_ok_no_content()
