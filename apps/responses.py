@@ -31,7 +31,7 @@ def resp_exception(resource: str, description :str = "",
     """
 
     if not isinstance(resource, str):
-        raise ValuerError(MSG_RESOURCE_MUST_STRING)
+        raise ValueError(MSG_RESOURCE_MUST_STRING)
 
     resp = jsonify({
         "resource": resource,
@@ -99,7 +99,6 @@ def resp_ok(resource :str, msg :str, data=None, **extras):
     response.update(extras)
 
     resp = jsonify(response)
-
     resp.status_code = 200
 
     return resp
