@@ -4,6 +4,7 @@ from flask_restful import Api, Resource
 
 from apps.store.resources.client_resources import ClientCollection, ClientItem
 from apps.store.resources.product_resources import ProductCollection, ProductItem
+from apps.store.resources.order_resources import OrderCollection
 
 class Index(Resource):
 
@@ -20,6 +21,8 @@ def configure_api(app):
 
     api.add_resource(ProductCollection, "/products")
     api.add_resource(ProductItem, "/products/<string:cod_prod>")
+
+    api.add_resource(OrderCollection, "/orders")
 
     api.init_app(app)
 
